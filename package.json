@@ -9,7 +9,7 @@
     "prettier": "npx prettier --write .",
     "dev": "npx webpack server",
     "prepare": "husky install",
-    "start": "webpack server"
+    "start": "node scripts/start.js"
   },
   "repository": {
     "type": "git",
@@ -39,5 +39,9 @@
     "webpack": "^5.41.1",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^20.1.5",
+    "@hapi/inert": "^6.0.3"
   }
 }
