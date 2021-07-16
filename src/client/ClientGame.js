@@ -1,23 +1,17 @@
+// eslint-disable-next-line import/no-named-as-default
 import ClientEngine from './ClientEngine';
 import ClientWorld from './ClientWorld';
 import sprites from '../../configs/sprites';
 import levelCfg from '../../configs/world.json';
-import gameObjects from '../../configs/gameObjects.json';
 
 class ClientGame {
   constructor(cfg) {
     Object.assign(this, {
-      cfg,
-      gameObjects, // присваиваем экземпляру класса переданный конфиг с id canvas в html
-      player: null,
+      cfg, // присваиваем экземпляру класса переданный конфиг с id canvas в html
     });
     this.engine = this.createEngine();
     this.world = this.createWorld();
     this.initEngine();
-  }
-
-  setPlayer(player) {
-    this.player = player;
   }
 
   createWorld() {
@@ -31,10 +25,8 @@ class ClientGame {
 
   initEngine() {
     this.engine.loadSprites(sprites).then(() => {
-      this.world.init();
-      this.engine.on('render', (_, time) => {
-        console.log(time);
-        this.map.render(time);
+      this.engine.on('render', () => {
+        this.world.init();
         // console.log('render TEST');  производим подписку на событие загрузки изображений
       });
       this.engine.start(); //  запускаем метод 'start' для
