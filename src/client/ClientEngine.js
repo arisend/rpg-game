@@ -1,5 +1,5 @@
-/* eslint-disable guard-for-in */
 import EventSourceMixin from '../common/EventSourceMixin';
+import ClientCamera from './ClientCamera';
 
 const spritew = 48;
 const spriteh = 48;
@@ -11,7 +11,8 @@ class ClientEngine {
       ctx: null,
       imageLoaders: [], // хранит промисы на загрузку sprites
       sprites: {}, // хранит объекты sprites , включая тип, ссылку и диапазон пикселей
-      images: {}, // хранит только уникальные ссылки на sprites
+      images: {}, // хранит только уникальные ссылки на  sprites
+      camera: new ClientCamera({ canvas, engine: this }),
     });
     this.ctx = canvas.getContext('2d');
     this.loop = this.loop.bind(this); // привязка контекста который теряется
@@ -34,21 +35,18 @@ class ClientEngine {
   }
 
   loadSprites(sprites) {
-    this.imageLoader = []; // гарантирование наличия массива
-    // eslint-disable-next-line no-restricted-syntax
-    for (const groupName in sprites) {
-      const group = sprites[groupName];
-      this.sprites[groupName] = group;
-      // eslint-disable-next-line no-restricted-syntax
-      for (const spriteName in group) {
-        const { img } = group[spriteName];
+    this.imageLoader = [];
+    Object.keys(sprites).forEach((v) => {
+      const group = sprites[v];
+      this.sprites[v] = group;
+      Object.keys(group).forEach((i) => {
+        const { img } = group[i];
         if (!this.images[img]) {
-          this.imageLoaders.push(this.loadImage(img)); // добавление
-          // ссылки на изображение если ее еще нет в массиве,
-          // чтобы избежать дублирования загрузки
+          this.imageLoaders.push(this.loadImage(img));
         }
-      }
-    }
+      });
+    });
+
     return Promise.all(this.imageLoaders); // ожидание выполнения всех промисов
   }
 
@@ -59,22 +57,6 @@ class ClientEngine {
       i.onload = () => resolve(i); // ждем загрузки изображения и помечаем выполнение промиса
       i.src = url; // инициализация загрузки изображения по ссылке
     });
-  }
-
-  renderSpriteFrame(worldCfg, game) {
-    const { map } = worldCfg;
-    map.forEach((cfgRow, y) => {
-      cfgRow.forEach((cfgCell, x) => {
-        const [sX, sY, sW, sH] = this.sprites.terrain[cfgCell[0]].frames[0];
-        const terrains = document.createElement('img');
-        terrains.src = this.sprites.terrain[cfgCell[0]].img;
-        game.engine.ctx.drawImage(terrains, sX, sY, sW, sH,
-          x * spritew, y * spriteh, spritew, spriteh);
-      });
-    });
-
-    //
-    // this.ctx.drawImage(img, fx, fy, fw, fh, x, y, w, h);
   }
 }
 
