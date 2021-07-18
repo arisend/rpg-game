@@ -1,5 +1,6 @@
 import EventSourceMixin from '../common/EventSourceMixin';
 import ClientInput from './ClientInput';
+import ClientCamera from './ClientCamera';
 
 class ClientEngine {
   constructor(canvas) {
@@ -11,6 +12,7 @@ class ClientEngine {
       imageLoaders: [],
       sprites: {},
       images: {},
+      camera: new ClientCamera({ canvas, engine: this }),
       input: new ClientInput(canvas),
     });
     this.ctx = canvas.getContext('2d');
@@ -52,10 +54,10 @@ class ClientEngine {
     });
   }
   renderSpriteFrame({ sprite, frame, x, y, w, h }) {
-    const [fx, fy, fw, fh] = frame;
-    //console.log(sprite,fx,fy,fw,fh,x,y,w,h)
+    const [fx, fy, fw, fh] = this.sprites[sprite[0]][sprite[1]].frames[0];
     const terrain = document.createElement('img');
-    terrain.src = sprite;
+    terrain.src = this.sprites[sprite[0]][sprite[1]].img;
+    //console.log(fx, fy, fw, fh, x, y, w, h)
     this.ctx.drawImage(terrain, fx, fy, fw, fh, x, y, w, h);
   }
 }

@@ -1,56 +1,54 @@
 import levelCfg from '../configs/world.json';
-
-class ClientWorld {
+import ClientCell from './ClientCell';
+import PositionedObject from '../common/PositionedObject';
+class ClientWorld extends PositionedObject {
   constructor(game, engine, levelCfg) {
+    super(game, engine, levelCfg);
+    const worldHeight = levelCfg.map.length;
+    const worldWidth = levelCfg.map[0].length;
+    const cellSize = engine.canvas.height / levelCfg.camera.height;
     Object.assign(this, {
       game,
       engine,
       levelCfg,
-      height: levelCfg.map.length,
-      width: levelCfg.map[0].length,
+      height: worldHeight * cellSize,
+      width: worldWidth * cellSize,
+      worldWidth,
+      worldHeight,
+      cellWidth: cellSize,
+      cellHeight: cellSize,
+      map: [],
     });
   }
   init() {
     //console.log('map init');
-
-    levelCfg.map.forEach((cfgRow, fy) => {
-      cfgRow.forEach((cfgCell, fx) => {
-        cfgCell.forEach((cfgL, fl) => {
-          //console.log(cfgL[0]);
-          if (fl === 0) {
-            //console.log(this.engine.sprites.terrain[cfgL[0]].frames)
-            this.engine.renderSpriteFrame({
-              sprite: 'http://localhost:3000/assets/terrain.png',
-              frame: this.engine.sprites.terrain[cfgL[0]].frames[0],
-              x: fx * 48,
-              y: fy * 48,
-              w: 48,
-              h: 48,
-            });
-          } else if ((fl === 1 && cfgL[0] == 'spawn') || cfgL[0] == 'npcSpawn') {
-            //console.log(cfgL[0] )
-            this.engine.renderSpriteFrame({
-              sprite: 'http://localhost:3000/assets/terrain.png',
-              frame: this.engine.sprites.terrain[cfgL[0]].frames[0],
-              x: fx * 48,
-              y: fy * 48,
-              w: 48,
-              h: 48,
-            });
-          } else {
-            //console.log(cfgL[0].type)
-            this.engine.renderSpriteFrame({
-              sprite: 'http://localhost:3000/assets/characters.png',
-              frame: this.engine.sprites.characters[cfgL[0].type].frames[0],
-              x: fx * 48,
-              y: fy * 48,
-              w: 48,
-              h: 48,
-            });
-          }
+    const { levelCfg, map, worldWidth, worldHeight } = this;
+    for (let row = 0; row < worldHeight; row++) {
+      for (let col = 0; col < worldWidth; col++) {
+        if (!map[row]) {
+          map[row] = [];
+        }
+        map[row][col] = new ClientCell({
+          world: this,
+          cellCol: col,
+          cellRow: row,
+          cellCfg: levelCfg.map[row][col],
         });
-      });
-    });
+      }
+    }
+  }
+
+  render(time) {
+    const { map, worldWidth, worldHeight } = this;
+    for (let row = 0; row < worldHeight; row++) {
+      for (let col = 0; col < worldWidth; col++) {
+        map[row][col].render(time);
+      }
+    }
+  }
+
+  cellAt(col, row) {
+    return this.map[row] && this.map[row][col];
   }
 }
 export default ClientWorld;

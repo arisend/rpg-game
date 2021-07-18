@@ -3,7 +3,7 @@ import MovableObject from '../common/MovableObject';
 class ClientCamera extends MovableObject {
   constructor(cfg) {
     super(cfg);
-    Object.assign(this, { cfg, width: cfg.canvas.width, height: cfg.canvas.height });
+    Object.assign(this, { cfg, width: cfg.canvas.width, height: cfg.canvas.height }, cfg);
   }
   focusAtGameObject(obj) {
     const pos = obj.worldPosition(50, 50);

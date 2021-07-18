@@ -3,15 +3,15 @@ import MovableObject from '../common/MovableObject';
 class ClientGameObject extends MovableObject {
   constructor(cfg) {
     super();
-
     const { x, y, width, height } = cfg.cell;
-
     const world = cfg.cell.world;
     const gameObjs = world.game.gameObjects;
-    let objCfg;
-    objCfg = typeof cfg.objCfg === 'string' ? { type: cfg.objCfg } : cfg.objCfg;
-    if (objCfg) {
-      this.game.setPlayer(objCfg);
+
+    const objCfg = typeof cfg.objCfg === 'string' ? { type: cfg.objCfg } : cfg.objCfg;
+
+    if (objCfg.player) {
+      console.log('test player');
+      world.game.setPlayer(this); // this
     }
 
     Object.assign(
