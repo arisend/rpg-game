@@ -1,3 +1,4 @@
+
 import levelCfg from '../configs/world.json';
 import ClientCell from './ClientCell';
 import PositionedObject from '../common/PositionedObject';
@@ -7,10 +8,12 @@ class ClientWorld extends PositionedObject {
     const worldHeight = levelCfg.map.length;
     const worldWidth = levelCfg.map[0].length;
     const cellSize = engine.canvas.height / levelCfg.camera.height;
+
     Object.assign(this, {
       game,
       engine,
       levelCfg,
+
       height: worldHeight * cellSize,
       width: worldWidth * cellSize,
       worldWidth,
@@ -49,6 +52,7 @@ class ClientWorld extends PositionedObject {
 
   cellAt(col, row) {
     return this.map[row] && this.map[row][col];
+
   }
 }
 export default ClientWorld;

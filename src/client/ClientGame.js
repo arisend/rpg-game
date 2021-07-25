@@ -1,8 +1,10 @@
+
 import ClientEngine from './ClientEngine';
 import sprites from '../configs/sprites';
 import ClientWorld from './ClientWorld';
 import levelCfg from '../configs/world.json';
 import gameObjects from '../configs/gameObjects.json';
+
 
 class ClientGame {
   constructor(cfg) {
@@ -22,6 +24,7 @@ class ClientGame {
   }
   createWorld() {
     return new ClientWorld(this, this.engine, levelCfg);
+
   }
 
   createEngine() {
@@ -70,14 +73,17 @@ class ClientGame {
           });
         }
       },
+
     });
   }
 
   static init(cfg) {
     if (!ClientGame.game) {
+
       ClientGame.game = new ClientGame(cfg);
       console.log('Game INIT');
     }
   }
 }
+
 export default ClientGame;
