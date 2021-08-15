@@ -10,6 +10,11 @@ class ClientGameObject extends MovableObject {
 
     const objCfg = typeof cfg.objCfg === 'string' ? { type: cfg.objCfg } : cfg.objCfg;
 
+    if (objCfg.player) {
+      console.log('test player');
+      world.game.setPlayer(this); // this
+    }
+
     Object.assign(
       this,
       {
@@ -74,7 +79,7 @@ class ClientGameObject extends MovableObject {
     const { x, y, width, height, world } = this;
     const { engine } = world;
     const { sprite, frame, states, type } = this.spriteCfg;
-    const spriteFrame = type === 'static' ? frame : this.getCurrentFrame(time);
+    const spriteFrame = type === 'static' ? frame : this.getCurrentFrame(time); //states ? states.main.frames[0] : frame;
     engine.renderSpriteFrame({ sprite, frame: spriteFrame, x, y, w: width, h: height });
   }
 
