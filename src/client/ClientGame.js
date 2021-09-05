@@ -3,22 +3,20 @@ import sprites from '../configs/sprites';
 import ClientWorld from './ClientWorld';
 import levelCfg from '../configs/world.json';
 import gameObjects from '../configs/gameObjects.json';
-import ClientApi from "./ClientApi";
+import ClientApi from './ClientApi';
 
 class ClientGame {
   constructor(cfg) {
     Object.assign(this, {
       cfg,
-      gameObjects:cfg.gameObjects,
+      gameObjects: cfg.gameObjects,
       player: null,
       players: {},
-      api:new ClientApi({
-        game:this,
+      api: new ClientApi({
+        game: this,
         ...cfg.apiCfg,
-
       }),
-      spawPoint:[],
-
+      spawPoint: [],
     });
     this.api.connect();
 
@@ -52,27 +50,30 @@ class ClientGame {
       this.api.join(this.cfg.playerName);
     });
   }
-  setPlayers(playerList){
+  setPlayers(playerList) {
     playerList.forEach((player) => this.createPlayer(player));
   }
-  createCurrentPlayer(playerCfg){
+  createCurrentPlayer(playerCfg) {
     const playerObj = this.createPlayer(playerCfg);
     this.setPlayer(playerObj);
   }
-  createPlayer({id,col,row,layer,skin,name}){
-      if (!this.players[id]){
-        const cell = this.map.cellAt(col,row);
-        const playerObj = cell.createGameObject({
-          'class':'player',
-          type:skin,
+  createPlayer({ id, col, row, layer, skin, name }) {
+    if (!this.players[id]) {
+      const cell = this.map.cellAt(col, row);
+      const playerObj = cell.createGameObject(
+        {
+          class: 'player',
+          type: skin,
           playerId: id,
           playerName: name,
-        }, layer);
+        },
+        layer,
+      );
 
-        cell.addGameObject(playerObj);
-        this.players[id]=playerObj;
-      }
-      return this.players[id];
+      cell.addGameObject(playerObj);
+      this.players[id] = playerObj;
+    }
+    return this.players[id];
   }
 
   initKeys() {
@@ -85,7 +86,7 @@ class ClientGame {
   }
 
   movePlayerToDir(dir) {
-    this.api.move(dir)
+    this.api.move(dir);
   }
   playerMoveAnimation() {
     const dirs = {
@@ -109,20 +110,18 @@ class ClientGame {
     }
   }
 
-
-  addSpawnPoint(spawPoint){
+  addSpawnPoint(spawPoint) {
     this.spawPoint.push(spawPoint);
   }
-  getPlayerById(id){
+  getPlayerById(id) {
     return this.players[id];
   }
-  removePlayerById(id){
-    const player =this.getPlayerById(id);
-    if (player){
+  removePlayerById(id) {
+    const player = this.getPlayerById(id);
+    if (player) {
       player.detouch();
       delete this.players[id];
     }
-
   }
 
   static init(cfg) {

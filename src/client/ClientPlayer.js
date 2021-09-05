@@ -4,7 +4,6 @@ class ClientPlayer extends ClientGameObject {
   constructor(cfg) {
     super(cfg);
     this.playerName = cfg.objCfg.playerName;
-
   }
   render(time) {
     super.render(time);

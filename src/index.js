@@ -2,11 +2,11 @@ import { io } from 'socket.io-client';
 import './index.scss';
 import ClientGame from './client/ClientGame';
 import { getTime } from './common/util';
-window.addEventListener('load', async() => {
+window.addEventListener('load', async () => {
   const socket = io('https://jsprochat.herokuapp.com');
-  const world = await fetch ('https://jsmarathonpro.herokuapp.com/api/v1/world').then(res => res.json());
-  const sprites = await fetch ('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then(res => res.json());
-  const gameObjects = await fetch ('https://jsmarathonpro.herokuapp.com/api/v1/gameObjects').then(res => res.json());
+  const world = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/world').then((res) => res.json());
+  const sprites = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then((res) => res.json());
+  const gameObjects = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/gameObjects').then((res) => res.json());
   console.log('#### world', world);
   console.log('#### sprites', sprites);
   console.log('#### gameObjects', gameObjects);
@@ -24,10 +24,17 @@ window.addEventListener('load', async() => {
   const submitName = (e) => {
     e.preventDefault();
     if ($inputName.value) {
-      ClientGame.init({ tagId: 'game', playerName: $inputName.value , world, sprites,gameObjects,
-          apiCfg:{
-        url:'https://jsmarathonpro.herokuapp.com/',path:'/game'
-        }});
+      ClientGame.init({
+        tagId: 'game',
+        playerName: $inputName.value,
+        world,
+        sprites,
+        gameObjects,
+        apiCfg: {
+          url: 'https://jsmarathonpro.herokuapp.com/',
+          path: '/game',
+        },
+      });
     }
     $chatWrap.style.display = 'block';
     $nameForm.removeEventListener('submit', submitName);
