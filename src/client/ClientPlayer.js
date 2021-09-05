@@ -3,9 +3,7 @@ import ClientGameObject from './ClientGameObject';
 class ClientPlayer extends ClientGameObject {
   constructor(cfg) {
     super(cfg);
-    this.playerName = cfg.cell.world.cfg.playerName;
-    const world = cfg.cell.world;
-    world.game.setPlayer(this);
+    this.playerName = cfg.objCfg.playerName;
   }
   render(time) {
     super.render(time);
