@@ -11,7 +11,6 @@ class ClientGame {
       gameObjects,
       player: null,
     });
-
     this.engine = this.createEngine();
     this.map = this.createWorld();
     this.initEngine();
